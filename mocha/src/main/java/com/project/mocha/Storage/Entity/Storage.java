@@ -1,5 +1,6 @@
 package com.project.mocha.Storage.Entity;
 
+import com.project.mocha.User.Entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +14,10 @@ import java.io.Serializable;
 public class Storage {
     @EmbeddedId
     private StorageId storageId;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @MapsId("userId")
+    private User user;
 
     @Embeddable
     @Data

@@ -14,8 +14,7 @@ import java.util.List;
 public class User {
     @Id
     @Column(name="user_id", nullable=false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="USER_SEQ")
-    @SequenceGenerator(name="USER_SEQ", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int userId;
 
     @Column(name="uid", nullable=false, length=20)
@@ -27,6 +26,6 @@ public class User {
     @Column(name="is_adult", nullable=false)
     private boolean isAdult;       // default를 false로?
 
-    @OneToMany(mappedBy="Storage")
+    @OneToMany(mappedBy="user", fetch=FetchType.EAGER)
     private List<Storage> StorageList;
 }
