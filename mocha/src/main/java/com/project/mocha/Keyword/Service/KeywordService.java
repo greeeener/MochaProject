@@ -2,7 +2,7 @@ package com.project.mocha.Keyword.Service;
 
 import com.project.mocha.Keyword.DTO.CreateKeywordRequest;
 import com.project.mocha.Keyword.DTO.CreateKeywordResponse;
-import com.project.mocha.Keyword.DTO.ReadKeywordResponse;
+import com.project.mocha.Keyword.DTO.ReadKeywordListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class KeywordService {
         return null;
     }
 
-    public ReadKeywordResponse getKeywordList(int id){
+    public ReadKeywordListResponse getKeywordList(int id){
         return null;
     }
 }
