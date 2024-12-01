@@ -1,4 +1,4 @@
 package com.project.mocha.Keyword.DTO;
 
-public class GetKeywordListResponse {
+public class ReadKeywordListResponse {
 }
