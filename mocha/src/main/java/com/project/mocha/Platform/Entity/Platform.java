@@ -11,7 +11,7 @@ import lombok.*;
 public class Platform {
     @Id
     @Column(name="platform_id", nullable=false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="PLATFORM_SEQ")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @SequenceGenerator(name="PLATFORM_SEQ", allocationSize=1)
     private int platformId;
 

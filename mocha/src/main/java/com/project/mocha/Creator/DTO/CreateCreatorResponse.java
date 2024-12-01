@@ -1,4 +1,4 @@
 package com.project.mocha.Creator.DTO;
 
-public class CreatorDTO {
+public class CreateCreatorResponse {
 }

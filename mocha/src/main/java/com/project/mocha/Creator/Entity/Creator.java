@@ -18,7 +18,7 @@ import java.util.List;
 public class Creator {
     @Id
     @Column(nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CREATOR_SEQ")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @SequenceGenerator(name = "CREATOR_SEQ", allocationSize=1)
     private int creator_id;
 
