@@ -1,6 +1,6 @@
 package com.project.mocha.Storage.DTO;
 
-public record CreateStorageRequest(
+public record DeleteStorageRequest(
         int userId,
         int creationId
-){}
+) {}

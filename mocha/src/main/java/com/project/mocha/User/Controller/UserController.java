@@ -1,9 +1,6 @@
 package com.project.mocha.User.Controller;
 
-import com.project.mocha.User.DTO.CreateUserResponse;
-import com.project.mocha.User.DTO.CreateUserRequest;
-import com.project.mocha.User.DTO.ReadUserResponse;
-import com.project.mocha.User.DTO.UpdateUserRequest;
+import com.project.mocha.User.DTO.*;
 import com.project.mocha.User.Service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,39 +19,36 @@ public class UserController {
 
     private final UserService userService;
 
-    /*
-    user id는 url에 안 들어가는 게 보안에 좋다고 해서 일단 뺐음
-     */
-
     @PostMapping
     @Operation(summary="create user")
-    public ResponseEntity<CreateUserResponse> createUser(
-            @Parameter(required=true, description="user create request")
+    public int createUser(
+            @Parameter(required=true, description="create user request")
             @RequestBody CreateUserRequest request){
-        return ResponseEntity.ok(userService.createUser(request));
+        return userService.createUser(request);
     }
 
-    @GetMapping
+    @PostMapping("/get")
     @Operation(summary="get user by id")
     public ResponseEntity<ReadUserResponse> getUser(
-            @Parameter(required=true, description="user id") int id){
-        return ResponseEntity.ok(userService.getUser(id));
+            @Parameter(required=true, description="read user request")
+            @RequestBody ReadUserRequest request){
+        return ResponseEntity.ok(userService.getUser(request));
     }
 
     @PutMapping
     @Operation(summary="update user by id")
-    public ResponseEntity<CreateUserResponse> updateUser(
-            @Parameter(required=true, description="user id") int id,
-            @Parameter(required=true, description="user update request")
+    public int updateUser(
+            @Parameter(required=true, description="update user request")
             @RequestBody UpdateUserRequest request){
-        return ResponseEntity.ok(userService.updateUser(id, request));
+        return userService.updateUser(request);
     }
 
     @DeleteMapping
     @Operation(summary="delete user by id")
     public ResponseEntity<ReadUserResponse> deleteUser(
-            @Parameter(required=true, description="user id") int id){
-        userService.deleteUser(id);
+            @Parameter(required=true, description="delete user request")
+            @RequestBody ReadUserRequest request){
+        userService.deleteUser(request);
         return ResponseEntity.noContent().build();
     }
 }

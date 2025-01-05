@@ -1,27 +1,59 @@
 package com.project.mocha.User.Service;
 
-import com.project.mocha.User.DTO.CreateUserRequest;
-import com.project.mocha.User.DTO.CreateUserResponse;
-import com.project.mocha.User.DTO.ReadUserResponse;
-import com.project.mocha.User.DTO.UpdateUserRequest;
+import com.project.mocha.User.DTO.*;
+import com.project.mocha.User.Entity.User;
+import com.project.mocha.User.Repository.UserRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+@Setter
 @RequiredArgsConstructor
 @Service
 public class UserService {
-    public CreateUserResponse createUser(CreateUserRequest request){
+
+    /*
+    나중에 Session 사용하게 되면 DTO 구조랑 로직 바꿔야할 듯
+     */
+
+    private final UserRepository userRepository;
+
+    @Transactional
+    public int createUser(CreateUserRequest request){
+        User user = User.builder()
+                .uid(request.uid())
+                .pwd(request.pwd())
+                .isAdult(request.isAdult())
+                .build();
+        return userRepository.save(user).getUserId();
+    }
+
+    public ReadUserResponse getUser(ReadUserRequest request){
+        Optional<User> result = userRepository.findById(request.userId());
+        if (result.isPresent()){
+            User user = result.get();
+            return new ReadUserResponse(user.getUserId(), user.getUid(), user.isAdult());
+        }
         return null;
     }
 
-    public ReadUserResponse getUser(int id){
-        return null;
+    @Transactional
+    public int updateUser(UpdateUserRequest request){
+        User user = User.builder()
+                .userId(request.userId())
+                .uid(request.uid())
+                .pwd(request.pwd())
+                .isAdult(request.isAdult())
+                .build();
+        return userRepository.save(user).getUserId();
     }
 
-    // Create와 Update 때 주고받는 DTO가 비슷할 거라고 판단해 재사용함
-    public CreateUserResponse updateUser(int id, UpdateUserRequest request){
-        return null;
+    @Transactional
+    public void deleteUser(ReadUserRequest request){
+        userRepository.deleteById(request.userId());
     }
-
-    public void deleteUser(int id){}
 }
