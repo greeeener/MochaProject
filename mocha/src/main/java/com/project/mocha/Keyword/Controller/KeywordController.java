@@ -2,7 +2,7 @@ package com.project.mocha.Keyword.Controller;
 
 import com.project.mocha.Keyword.DTO.CreateKeywordRequest;
 import com.project.mocha.Keyword.DTO.CreateKeywordResponse;
-import com.project.mocha.Keyword.DTO.ReadKeywordListResponse;
+import com.project.mocha.Keyword.DTO.ReadKeywordResponse;
 import com.project.mocha.Keyword.Service.KeywordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -26,10 +26,10 @@ public class KeywordController {
         return ResponseEntity.ok(keywordService.createKeyword(request));
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary="get keyword by id")
-    public ResponseEntity<ReadKeywordListResponse> getCreator(@Parameter(required=true, description="keyword id")
-                                                          @PathVariable int id){
-        return ResponseEntity.ok(keywordService.getKeywordList(id));
+    @GetMapping("/{genre_id}")
+    @Operation(summary="get keyword list by genre id")
+    public ResponseEntity<ReadKeywordResponse> getKeywordList(@Parameter(required=true, description="get keyword list by genre id")
+                                                          @PathVariable int genre_id){
+        return ResponseEntity.ok(keywordService.getKeywordList(genre_id));
     }
 }

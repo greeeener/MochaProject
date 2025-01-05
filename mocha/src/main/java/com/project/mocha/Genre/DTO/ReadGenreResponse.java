@@ -1,4 +1,7 @@
 package com.project.mocha.Genre.DTO;
 
-public class ReadGenreResponse {
+public record ReadGenreResponse (
+        int genreId,
+        String genreName
+){
 }

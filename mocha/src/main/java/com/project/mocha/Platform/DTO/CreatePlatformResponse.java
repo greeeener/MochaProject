@@ -1,4 +1,8 @@
 package com.project.mocha.Platform.DTO;
 
-public class CreatePlatformResponse {
+public record CreatePlatformResponse (
+        int platformId,
+        String platformName,
+        double coinCost
+){
 }

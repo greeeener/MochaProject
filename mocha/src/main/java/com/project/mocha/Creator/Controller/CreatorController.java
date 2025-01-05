@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/mc/creator")
 @RequiredArgsConstructor
-@Tag(name="creator")
+@Tag(name="Creator")
 public class CreatorController {
 
     private final CreatorService creatorService;
