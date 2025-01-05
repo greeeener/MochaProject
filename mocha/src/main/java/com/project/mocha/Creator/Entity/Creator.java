@@ -15,9 +15,10 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "Creator")
 public class Creator {
     @Id
-    @Column(nullable = false)
+    //@Column(nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @SequenceGenerator(name = "CREATOR_SEQ", allocationSize=1)
     private int creator_id;

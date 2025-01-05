@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/mc/platform")
 @RequiredArgsConstructor
-@Tag(name="platform")
+@Tag(name="Platform")
 public class PlatformController {
 
     private final PlatformService platformService;

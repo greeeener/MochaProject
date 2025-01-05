@@ -1,4 +1,7 @@
 package com.project.mocha.Genre.Repository;
 
-public class GenreRepository {
+import com.project.mocha.Genre.Entity.Genre;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface GenreRepository extends JpaRepository<Genre, Integer> {
 }

@@ -1,8 +1,10 @@
 package com.project.mocha.Creator.DTO;
 
 public record CreateCreatorRequest (
-        int id,
-        String cname
+        String creatorName
 ){
 
+    public String getCreatorName() {
+        return creatorName;
+    }
 }
