@@ -1,4 +1,7 @@
 package com.project.mocha.Creator.DTO;
 
-public class ReadCreatorResponse {
+public record ReadCreatorResponse(
+        int creatorId,
+        String creatorName
+) {
 }

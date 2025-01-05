@@ -1,4 +1,11 @@
 package com.project.mocha.Genre.DTO;
 
-public class CreateGenreResponse {
+import com.project.mocha.Genre.Entity.Genre;
+
+import java.util.List;
+
+public record CreateGenreResponse (
+        int genreId,
+        String genreName
+){
 }

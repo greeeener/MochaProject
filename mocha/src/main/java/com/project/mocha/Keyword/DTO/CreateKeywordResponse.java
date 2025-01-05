@@ -1,4 +1,9 @@
 package com.project.mocha.Keyword.DTO;
 
-public class CreateKeywordResponse {
+public record CreateKeywordResponse(
+        int keywordId,
+        String keywordName,
+        String isExpose,
+        int genreId
+) {
 }
