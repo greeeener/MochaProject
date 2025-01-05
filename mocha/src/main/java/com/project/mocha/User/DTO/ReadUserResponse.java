@@ -1,4 +1,7 @@
 package com.project.mocha.User.DTO;
 
-public class ReadUserResponse {
-}
+public record ReadUserResponse(
+        int userId,
+        String uid,
+        boolean isAdult
+){}
