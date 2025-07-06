@@ -1,0 +1,135 @@
+.test-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+}
+
+.creator-card {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+.creator-card:hover {
+    transform: translateY(-5px);
+}
+
+.title {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 25px;
+    font-weight: 600;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 10px;
+}
+
+.creator-info {
+    margin-bottom: 20px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.label {
+    font-weight: 600;
+    color: #555;
+    font-size: 16px;
+}
+
+.value {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+    background: #f8f9fa;
+    padding: 4px 12px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.api-info {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.api-url {
+    font-size: 12px;
+    color: #666;
+    font-family: 'Courier New', monospace;
+    background: #f8f9fa;
+    padding: 8px;
+    border-radius: 4px;
+    margin: 0;
+    word-break: break-all;
+}
+
+.loading {
+    text-align: center;
+    font-size: 18px;
+    color: white;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.error {
+    text-align: center;
+    font-size: 16px;
+    color: #ff4757;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    border-left: 4px solid #ff4757;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+    .creator-card {
+        padding: 20px;
+        margin: 10px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    .label, .value {
+        font-size: 14px;
+    }
+}
+
+/* 애니메이션 효과 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.creator-card {
+    animation: fadeIn 0.5s ease-out;
+}
