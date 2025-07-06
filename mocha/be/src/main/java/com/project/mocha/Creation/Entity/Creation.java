@@ -1,6 +1,9 @@
 package com.project.mocha.Creation.Entity;
 
 import com.project.mocha.Creator.Entity.Creator;
+import com.project.mocha.Genre.Entity.Genre;
+import com.project.mocha.Keyword.Entity.Keyword;
+import com.project.mocha.Platform.Entity.Platform;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.domain.Auditable;
@@ -16,15 +19,16 @@ import java.util.List;
 @Data //getter,setter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor(access= AccessLevel.PROTECTED) //데이터 생성자(빈 컬럼 없게 채워줌)
+@AllArgsConstructor(access= AccessLevel.PROTECTED)
+@Table(name = "Creation")
+//데이터 생성자(빈 컬럼 없게 채워줌)
 //@EnableJpaAuditing //JPA Audit(시간값 자동으로 채워주는 기능) - DB 로그 관리
 //@EntityListeners(AuditingEntityListener.class) //엔티티 변화 감지 - () 추가로 EnableJpaAuditing이 자동으로 갱신되도록
 public class Creation { //implements Auditable { //데이터 생성 및 최근 수정일 자동 관리
     @Id
-    @Column(nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CREATION_SEQ")
-    @SequenceGenerator(name = "CREATION_SEQ", allocationSize=1)
-    private int creation_id;
+    @Column(name="creation_id", nullable=false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private int creationId;
 
     @Column(nullable = false, length = 100)
     private String title;
@@ -65,10 +69,54 @@ public class Creation { //implements Auditable { //데이터 생성 및 최근 �
     @Column(nullable = false)
     private String description;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Creator> CreatorList;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Platform> PlatformList;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Genre> GenreList;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Keyword> KeywordList;
 
-    //@OneToMany(mappedBy = "Creation_has_Creator") private List<Creator> CreatorList;
-    //@OneToMany(mappedBy = "Creation_has_Platform") private List<Platform> PlatformList;
-    //@OneToMany(mappedBy = "Creation_has_Genre") private List<Genre> GenreList;
-    //@OneToMany(mappedBy = "Creation_has_Keyword") private List<Keyword> KeywordList;
 
+
+    public Creation(String title, String publisher, int age_limit, int episodes, boolean is_end, int free_episodes, int gidamu, String period, int rent_cost, int buy_cost, Date start_date, Date latest_date, String description, List<Creator> creatorList, List<Platform> platformList, List<Genre> genreList, List<Keyword> keywordList) {
+        this.title = title;
+        this.publisher = publisher;
+        this.age_limit = age_limit;
+        this.episodes = episodes;
+        this.is_end = is_end;
+        this.free_episodes = free_episodes;
+        this.gidamu = gidamu;
+        this.period = period;
+        this.rent_cost = rent_cost;
+        this.buy_cost = buy_cost;
+        this.start_date = start_date;
+        this.latest_date = latest_date;
+        this.description = description;
+        this.CreatorList = creatorList;
+        this.PlatformList = platformList;
+        this.GenreList = genreList;
+        this.KeywordList = keywordList;
+    }
+
+    public static Creation createCreation(String title, String publisher, int age_limit, int episodes, boolean is_end, int free_episodes, int gidamu, String period, int rent_cost, int buy_cost, Date start_date, Date latest_date, String description, List<Creator> creatorList, List<Platform> platformList, List<Genre> genreList, List<Keyword> keywordList) {
+        return new Creation(title, publisher, age_limit, episodes, is_end, free_episodes, gidamu, period, rent_cost, buy_cost, start_date, latest_date, description, creatorList, platformList, genreList, keywordList);
+    }
+
+    public void updateCreation(String title, String publisher, int age_limit, int episodes, boolean is_end, int free_episodes, int gidamu, String period, int rent_cost, int buy_cost, Date start_date, Date latest_date, String description, List<Creator> creatorList, List<Platform> platformList, List<Genre> genreList, List<Keyword> keywordList){
+        this.title = title;
+        this.publisher = publisher;
+        this.age_limit = age_limit;
+        this.episodes = episodes;
+        this.is_end = is_end;
+        this.free_episodes = free_episodes;
+        this.gidamu = gidamu;
+        this.period = period;
+        this.rent_cost = rent_cost;
+        this.buy_cost = buy_cost;
+        this.start_date = start_date;
+        this.latest_date = latest_date;
+        this.description = description;
+        this.CreatorList = creatorList;
+        this.PlatformList = platformList;
+        this.GenreList = genreList;
+        this.KeywordList = keywordList;
+    }
 }
