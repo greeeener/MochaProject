@@ -1,0 +1,150 @@
+/* src/components/Header/Header.css */
+.global-header {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
+    border-bottom: none;
+    z-index: 1000;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.header-content {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 로고 섹션 */
+.logo-section {
+    display: flex;
+    align-items: center;
+}
+
+/* 로고 이미지 */
+/*
+.header-logo {
+    max-width: 120px;
+    max-height: 40px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+ */
+
+/* 로고 텍스트 */
+.header-logo-text {
+    font-family: 'Jaro', sans-serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    letter-spacing: 0.5px;
+}
+
+.header-icons {
+    display: flex;
+    gap: 20px;
+    margin-left: auto;
+}
+
+.bookmark-icon,
+.user-icon {
+    width: 24px;
+    height: 24px;
+    color: black;
+    cursor: pointer;
+    transition: color 0.25s ease;
+}
+
+.bookmark-icon:hover,
+.user-icon:hover {
+    color: #f0f0f0;
+}
+
+/* 다크모드 대응 */
+@media (prefers-color-scheme: dark) {
+    /* 로고 이미지 */
+    /*
+    .header-logo {
+        filter: invert(1);
+    }
+    */
+
+    /* 로고 텍스트 다크모드 */
+    .header-logo-text {
+        color: rgba(255, 255, 255, 0.87);
+    }
+
+    .bookmark-icon,
+    .user-icon {
+        color: #ccc;
+    }
+
+    .bookmark-icon:hover,
+    .user-icon:hover {
+        color: rgba(255, 255, 255, 0.87);
+    }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .header-content {
+        padding: 12px 15px;
+    }
+
+    /* 로고 이미지 */
+    /*
+    .header-logo {
+        max-width: 100px;
+        max-height: 32px;
+    }
+     */
+
+    /* 로고 텍스트 반응형 */
+    .header-logo-text {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-content {
+        padding: 10px 15px;
+    }
+
+    .header-icons {
+        gap: 15px;
+    }
+
+    /* 로고 이미지 */
+    /*
+    .header-logo {
+        max-width: 80px;
+        max-height: 28px;
+    }
+    */
+
+    /* 로고 텍스트 반응형 */
+    .header-logo-text {
+        font-size: 24px;
+    }
+}
+
+/* 터치 디바이스 최적화 */
+@media (hover: none) and (pointer: coarse) {
+    .bookmark-icon,
+    .user-icon {
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
