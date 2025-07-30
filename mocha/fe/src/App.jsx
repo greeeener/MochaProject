@@ -2,6 +2,7 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header/Header';
 import MainHome from './pages/Home/MainHome';
+import Search from './pages/Search/Search';
 import ContentDetail from './pages/Artwork/ContentDetail';
 import './App.css';
 
@@ -25,6 +26,7 @@ function AppContent() {
             <div className={getPageContentClass()}>
                 <Routes>
                     <Route path="/" element={<MainHome />} />
+                    <Route path="/search" element={<Search />} />
                     <Route path="/content/:id" element={<ContentDetail />} />
                 </Routes>
             </div>

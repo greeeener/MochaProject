@@ -163,12 +163,6 @@ button:focus-visible {
   }
 }
 
-/* 포커스 아웃라인 개선 */
-*:focus {
-  outline: 2px solid #646cff;
-  outline-offset: 2px;
-}
-
 /* 터치 디바이스 최적화 */
 @media (hover: none) and (pointer: coarse) {
   button {
