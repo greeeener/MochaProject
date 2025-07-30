@@ -69,10 +69,43 @@ public class Creation { //implements Auditable { //데이터 생성 및 최근 �
     @Column(nullable = false)
     private String description;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "Creation_has_Creator",
+            joinColumns = @JoinColumn(name = "Creation_creation_id"),
+            inverseJoinColumns = @JoinColumn(name = "Creator_creator_id")
+    )
+    private List<Creator> CreatorList;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "Creation_has_Platform",  // 실제 테이블명에 맞게 수정 필요
+            joinColumns = @JoinColumn(name = "Creation_creation_id"),
+            inverseJoinColumns = @JoinColumn(name = "Platform_platform_id")
+    )
+    private List<Platform> PlatformList;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "Creation_has_Genre",  // 실제 테이블명에 맞게 수정 필요
+            joinColumns = @JoinColumn(name = "Creation_creation_id"),
+            inverseJoinColumns = @JoinColumn(name = "Genre_genre_id")
+    )
+    private List<Genre> GenreList;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "Creation_has_Keyword",  // 실제 테이블명에 맞게 수정 필요
+            joinColumns = @JoinColumn(name = "Creation_creation_id"),
+            inverseJoinColumns = @JoinColumn(name = "Keyword_keyword_id")
+    )
+    private List<Keyword> KeywordList;
+
+    /*
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Creator> CreatorList;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Platform> PlatformList;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Genre> GenreList;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Keyword> KeywordList;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Keyword> KeywordList;*/
 
 
 

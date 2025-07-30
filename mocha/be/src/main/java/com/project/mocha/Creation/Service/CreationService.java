@@ -16,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,4 +67,30 @@ public class CreationService {
         Creation creation = creationRepository.findById(creationID).orElseThrow();
         return  CreationResponse.from(creation);
     }
+
+    public CreationListResponse searchCreations(String keyword, int page, int size/*, String sortBy*/) {
+        //Sort sort = createSort(sortBy);
+        Pageable pageable = PageRequest.of(page,size/*,sort*/);
+
+        Page<Creation> searchResults = creationRepository.findAllWithFiltering(
+                keyword,
+                null,
+                null,
+                List.of(),
+                List.of(),
+                pageable
+        );
+
+        return CreationListResponse.from(searchResults);
+    }
+
+    /*
+    private Sort createSort(String sortBy) {
+        return switch (sortBy){
+            case "좋아요 순" -> Sort.by(Sort.Direction.ASC, "title");
+            default -> Sort.by(Sort.Direction.DESC, "title");
+        };
+    }
+     */
+
 }

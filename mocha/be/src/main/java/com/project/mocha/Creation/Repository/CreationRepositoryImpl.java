@@ -24,9 +24,6 @@ import static com.project.mocha.Creator.Entity.QCreator.creator;
 public class CreationRepositoryImpl implements CreationRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
-
-
-
     @Override
     public Page<Creation> findAllWithFiltering(String searchKeyword, String publisher, Boolean is_end, List<Genre> genreList, List<Keyword> keywordList, Pageable pageable) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
