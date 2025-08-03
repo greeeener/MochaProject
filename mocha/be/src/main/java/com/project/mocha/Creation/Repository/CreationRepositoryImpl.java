@@ -34,9 +34,11 @@ public class CreationRepositoryImpl implements CreationRepositoryCustom{
             booleanBuilder.or(creation.publisher.containsIgnoreCase(searchKeyword));
         }
 
+        /*
         if(is_end != null){
             booleanBuilder.and(creation.is_end.eq(is_end));
         }
+         */
 
         if (genreList != null && !genreList.isEmpty()) {
             for (Genre genre : genreList) {

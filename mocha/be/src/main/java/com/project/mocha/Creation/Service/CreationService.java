@@ -68,22 +68,6 @@ public class CreationService {
         return  CreationResponse.from(creation);
     }
 
-    public CreationListResponse searchCreations(String keyword, int page, int size/*, String sortBy*/) {
-        //Sort sort = createSort(sortBy);
-        Pageable pageable = PageRequest.of(page,size/*,sort*/);
-
-        Page<Creation> searchResults = creationRepository.findAllWithFiltering(
-                keyword,
-                null,
-                null,
-                List.of(),
-                List.of(),
-                pageable
-        );
-
-        return CreationListResponse.from(searchResults);
-    }
-
     /*
     private Sort createSort(String sortBy) {
         return switch (sortBy){

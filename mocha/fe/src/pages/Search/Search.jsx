@@ -26,38 +26,53 @@ const Search = () => {
     }, [location.search]);
 
     const performSearch = async (query) => {
-
-        try{
+        try {
             setLoading(true);
             setError(null);
 
-            const response = await fetch(
-                `/mc/creation/search?q=${encodeURIComponent(query || '')}&page=0&size=20`
-                //`mc/creation/search?q=${encodeURIComponent(query || '')}&page=0&size=20&sort=${sortBy}` //정렬
-            );
+            const requestBody = {
+                searchKeyword: query || '',
+                publisher: null,
+                genreList: [],
+                keywordList: []
+            };
 
-            if(!response.ok){
+            const response = await fetch(`/mc/creation/getCreationList?page=0&size=20`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+            if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
             const data = await response.json();
-            console.log('API 응답:',data);
+            console.log('API 응답:', data);
 
-            const formattedResults = data.creationResponsesList?.map(item => ({
-                id: item.id,
-                title: item.title,
-                author: Array.isArray(item.creatorList) ?
-                    item.creatorList.map(creator => creator.creator_name).join(', ') :
-                    item.publisher,
-                genre: Array.isArray(item.genreList) ?
-                    item.genreList.map(genre => genre.genre_name).join(', ') :
-                    '기타',
-                status: item.is_end ? '완결' : '연재중',
-                coverImage: "" //TODO: DB에 이미지 추가되면 바꾸기..
-            })) || [];
+            if (data.creationResponsesList) {
+                const formattedResults = data.creationResponsesList.map(item => ({
+                    id: item.id,
+                    title: item.title,
+                    author: Array.isArray(item.creatorList) && item.creatorList.length > 0 ?
+                        item.creatorList.map(creator => creator.creator_name).join(', ') :
+                        '알 수 없음',
+                    genre: Array.isArray(item.genreList) && item.genreList.length > 0 ?
+                        item.genreList.map(genre => genre.genre_name).join(', ') :
+                        '기타',
+                    status: item.is_end ? '완결' : '연재중',
+                    coverImage: ""
+                }));
 
-            setSearchResults(formattedResults);
-            setTotalCount(data.totalElements || 0);
+                console.log('변환된 결과:', formattedResults);
+                setSearchResults(formattedResults);
+                setTotalCount(data.totalElements || 0);
+            } else {
+                setSearchResults([]);
+                setTotalCount(0);
+            }
 
         } catch (error) {
             console.error('검색 오류:', error);
@@ -68,6 +83,7 @@ const Search = () => {
             setLoading(false);
         }
     };
+
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
