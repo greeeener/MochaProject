@@ -79,7 +79,7 @@ public class Creation { //implements Auditable { //데이터 생성 및 최근 �
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "Creation_has_Platform",  // 실제 테이블명에 맞게 수정 필요
+            name = "Creation_has_Platform",
             joinColumns = @JoinColumn(name = "Creation_creation_id"),
             inverseJoinColumns = @JoinColumn(name = "Platform_platform_id")
     )
@@ -87,7 +87,7 @@ public class Creation { //implements Auditable { //데이터 생성 및 최근 �
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "Creation_has_Genre",  // 실제 테이블명에 맞게 수정 필요
+            name = "Creation_has_Genre",
             joinColumns = @JoinColumn(name = "Creation_creation_id"),
             inverseJoinColumns = @JoinColumn(name = "Genre_genre_id")
     )
@@ -95,7 +95,7 @@ public class Creation { //implements Auditable { //데이터 생성 및 최근 �
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "Creation_has_Keyword",  // 실제 테이블명에 맞게 수정 필요
+            name = "Creation_has_Keyword",
             joinColumns = @JoinColumn(name = "Creation_creation_id"),
             inverseJoinColumns = @JoinColumn(name = "Keyword_keyword_id")
     )
