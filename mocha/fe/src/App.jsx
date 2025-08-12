@@ -4,6 +4,10 @@ import Header from './components/Header/Header';
 import MainHome from './pages/Home/MainHome';
 import Search from './pages/Search/Search';
 import ContentDetail from './pages/Artwork/ContentDetail';
+import Login from './pages/Login/Login';
+import MyPage from './pages/MyPage/MyPage';
+import Bookmark from './pages/Bookmark/Bookmark';
+
 import './App.css';
 
 function AppContent() {
@@ -28,6 +32,9 @@ function AppContent() {
                     <Route path="/" element={<MainHome />} />
                     <Route path="/search" element={<Search />} />
                     <Route path="/content/:id" element={<ContentDetail />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/mypage" element={<MyPage />} />
+                    <Route path="/bookmark" element={<Bookmark/>} />
                 </Routes>
             </div>
         </div>

@@ -1,0 +1,54 @@
+/* src/components/ResultList/ResultList.module.css */
+
+.results {
+    padding: 0 20px 20px;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    font-size: 16px;
+    color: #666;
+}
+
+.error {
+    text-align: center;
+    padding: 40px 20px;
+    color: #e74c3c;
+}
+
+.error button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.error button:hover {
+    background-color: #2980b9;
+}
+
+.no-results {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    font-size: 16px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .results {
+        padding: 0 16px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .results {
+        padding: 0 12px 12px;
+    }
+}

@@ -1,0 +1,279 @@
+/* src/pages/Login/Login.module.css */
+
+.container {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    background-color: #ffffff;
+    color: #213547;
+    overflow: hidden;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    -webkit-overflow-scrolling: touch;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    padding: 35px;
+    flex:1;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 0;
+    text-align: center;
+}
+
+.logo {
+    font-family: 'Jaro', sans-serif;
+    font-size: 52px;
+    font-weight: 400;
+    color: #000000;
+    margin-bottom: 40px;
+    padding: 0;
+    line-height: 1;
+    letter-spacing: 0.5px;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+    text-align: center;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto 10px auto;
+}
+
+.input-field {
+    width: 100%;
+    padding: 18px 20px;
+    border: none;
+    background-color: #f5f5f5;
+    font-size: 16px;
+    outline: none;
+    box-sizing: border-box;
+    font-family: inherit;
+    color: #213547;
+    margin-bottom: 1px;
+    text-align: left;
+}
+
+.input-field:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.input-field:last-of-type {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.input-field::placeholder {
+    color: #999;
+    text-align: left;
+}
+
+.input-field:focus {
+    background-color: #f5f5f5;
+    outline: none !important;
+}
+
+.login-button {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 8px;
+    background-color: #000000;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background-color 0.25s ease;
+}
+
+.login-button:hover {
+    background-color: #333333;
+}
+
+.login-button:focus {
+    outline: none;
+}
+
+.signup-button {
+    width: 100%;
+    max-width: 400px;
+    padding: 18px;
+    background-color: transparent;
+    color: #000000;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    font-family: inherit;
+    margin: 0 auto 30px auto;
+    transition: background-color 0.25s ease;
+}
+
+.signup-button:hover {
+    background-color: #f5f5f5;
+}
+
+.signup-button:focus {
+    outline: none;
+}
+
+.link-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+    padding: 0;
+    transition: color 0.25s ease;
+}
+
+.link-button:hover {
+    color: #213547;
+}
+
+.link-button:focus {
+    outline: none;
+}
+
+.separator {
+    color: #ccc;
+    font-size: 14px;
+}
+
+/* 다크모드 대응 */
+@media (prefers-color-scheme: dark) {
+    .container {
+        background-color: #242424;
+        color: rgba(255, 255, 255, 0.87);
+    }
+
+    .logo {
+        color: rgba(255, 255, 255, 0.87);
+    }
+
+    .input-field {
+        background-color: #3a3a3a;
+        color: rgba(255, 255, 255, 0.87);
+    }
+
+    .input-field:focus {
+        background-color: #3a3a3a;
+    }
+
+    .input-field::placeholder {
+        color: #888;
+    }
+
+    .login-button {
+        background-color: #646cff;
+    }
+
+    .login-button:hover {
+        background-color: #535bf2;
+    }
+
+    .signup-button {
+        color: rgba(255, 255, 255, 0.87);
+        border-color: #3a3a3a;
+    }
+
+    .signup-button:hover {
+        background-color: #3a3a3a;
+    }
+
+    .link-button {
+        color: #ccc;
+    }
+
+    .link-button:hover {
+        color: rgba(255, 255, 255, 0.87);
+    }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .content {
+        padding: 35px 20px;
+    }
+
+    .logo {
+        font-size: 48px;
+        margin-bottom: 35px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content {
+        padding: 35px 20px;
+    }
+
+    .logo {
+        font-size: 48px;
+        margin-bottom: 35px;
+    }
+
+    .input-field {
+        padding: 16px 15px;
+        font-size: 14px;
+    }
+
+    .login-button,
+    .signup-button {
+        padding: 16px;
+        font-size: 14px;
+    }
+
+    .link-button {
+        font-size: 13px;
+    }
+}
+
+/* 접근성 개선 */
+@media (prefers-reduced-motion: reduce) {
+    .login-button,
+    .signup-button,
+    .link-button {
+        transition: none;
+    }
+}
+
+/* 터치 디바이스 최적화 */
+@media (hover: none) and (pointer: coarse) {
+    .login-button,
+    .signup-button {
+        min-height: 44px;
+    }
+
+    .link-button {
+        min-height: 32px;
+        padding: 5px;
+    }
+}
