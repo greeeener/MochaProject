@@ -75,7 +75,7 @@
 /* 로고 텍스트 */
 .header-logo-text {
     font-family: 'Jaro', sans-serif;
-    font-size: 54px;
+    font-size: 52px;
     font-weight: 300;
     color: #000000;
     margin: 0;
@@ -115,10 +115,10 @@
 }
 
 .search-text {
-    font-size: 18px;
+    font-size: 15px;
     color: #666;
     margin: 5px 0;
-    line-height: 1.4;
+    line-height: 1.3;
     word-break: keep-all;
     white-space: normal;
 }
