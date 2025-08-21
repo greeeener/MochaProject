@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Header from './components/Header/Header';
 import MainHome from './pages/Home/MainHome';
 import Search from './pages/Search/Search';
-import ContentDetail from './pages/Artwork/ContentDetail';
+import ContentDetail from './pages/ContentDetail/ContentDetail';
 import Login from './pages/Login/Login';
 import MyPage from './pages/MyPage/MyPage';
 import Bookmark from './pages/Bookmark/Bookmark';

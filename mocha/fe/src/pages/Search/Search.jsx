@@ -25,10 +25,8 @@ const Search = () => {
         }
     }, [location.search]);
 
-    // src/pages/Search/Search.jsx - performSearch 함수만 수정
     const performSearch = async (query) => {
         try {
-            console.log('🔍 검색 시작:', query);
             setLoading(true);
             setError(null);
 
@@ -39,9 +37,6 @@ const Search = () => {
                 keywordList: []
             };
 
-            console.log('📤 요청 데이터:', requestBody);
-            console.log('📍 요청 URL:', `/mc/creation/getCreationList?page=0&size=20`);
-
             const response = await fetch(`/mc/creation/getCreationList?page=0&size=20`, {
                 method: 'POST',
                 headers: {
@@ -50,113 +45,43 @@ const Search = () => {
                 body: JSON.stringify(requestBody)
             });
 
-            console.log('📥 응답 상태:', response.status, response.statusText);
-            console.log('📥 응답 헤더:', response.headers);
-
             if (!response.ok) {
-                const errorText = await response.text();
-                console.error('❌ 서버 오류 응답:', errorText);
-                throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+                throw new Error(`서버 오류: ${response.status}`);
             }
 
             const data = await response.json();
-            console.log('✅ API 원본 응답:', data);
 
-            // 응답 구조 자세히 확인
-            if (data.creationResponsesList && data.creationResponsesList.length > 0) {
-                console.log('📊 첫 번째 아이템 구조:', data.creationResponsesList[0]);
+            // 결과 처리
+            if (data.creationResponsesList && Array.isArray(data.creationResponsesList)) {
+                const formattedResults = data.creationResponsesList.map(item => ({
+                    id: item.id || item.creationId,
+                    title: item.title || '제목 없음',
+                    author: Array.isArray(item.creatorList) && item.creatorList.length > 0 ?
+                        item.creatorList.map(creator => creator.creator_name || '알 수 없음').join(', ') :
+                        '알 수 없음',
+                    genre: Array.isArray(item.genreList) && item.genreList.length > 0 ?
+                        item.genreList.map(genre => genre.genre_name || '기타').join(', ') :
+                        '기타',
+                    status: item.is_end ? '완결' : '연재중',
+                    coverImage: item.coverImage || ""
+                }));
 
-                // 필드명들 확인
-                const firstItem = data.creationResponsesList[0];
-                console.log('🔑 사용 가능한 필드들:', Object.keys(firstItem));
-
-                // CreatorList, GenreList 확인
-                if (firstItem.CreatorList) {
-                    console.log('👤 CreatorList 구조:', firstItem.CreatorList);
-                }
-                if (firstItem.creatorList) {
-                    console.log('👤 creatorList 구조:', firstItem.creatorList);
-                }
-                if (firstItem.GenreList) {
-                    console.log('🎭 GenreList 구조:', firstItem.GenreList);
-                }
-                if (firstItem.genreList) {
-                    console.log('🎭 genreList 구조:', firstItem.genreList);
-                }
-            }
-
-            if (data.creationResponsesList) {
-                const formattedResults = data.creationResponsesList.map((item, index) => {
-                    console.log(`🔄 아이템 ${index + 1} 변환 중:`, item);
-
-                    // 안전한 데이터 접근
-                    const result = {
-                        id: item.creationId || item.id || index, // 여러 가능성 시도
-                        title: item.title || '제목 없음',
-                        author: '작가 정보 처리 중...',
-                        genre: '장르 정보 처리 중...',
-                        status: item.is_end ? '완결' : '연재중',
-                        coverImage: item.coverImage || ""
-                    };
-
-                    // CreatorList 처리 (대문자/소문자 모두 시도)
-                    try {
-                        const creators = item.CreatorList || item.creatorList || [];
-                        if (Array.isArray(creators) && creators.length > 0) {
-                            result.author = creators.map(creator =>
-                                creator.creator_name || creator.name || '알 수 없음'
-                            ).join(', ');
-                        } else {
-                            result.author = '알 수 없음';
-                        }
-                    } catch (authorError) {
-                        console.error('👤 작가 정보 처리 오류:', authorError);
-                        result.author = '작가 정보 오류';
-                    }
-
-                    // GenreList 처리
-                    try {
-                        const genres = item.GenreList || item.genreList || [];
-                        if (Array.isArray(genres) && genres.length > 0) {
-                            result.genre = genres.map(genre =>
-                                genre.genre_name || genre.name || '기타'
-                            ).join(', ');
-                        } else {
-                            result.genre = '기타';
-                        }
-                    } catch (genreError) {
-                        console.error('🎭 장르 정보 처리 오류:', genreError);
-                        result.genre = '장르 정보 오류';
-                    }
-
-                    console.log(`✅ 변환된 아이템 ${index + 1}:`, result);
-                    return result;
-                });
-
-                console.log('🎉 최종 변환된 결과:', formattedResults);
                 setSearchResults(formattedResults);
-                setTotalCount(data.totalElements || data.total || formattedResults.length);
+                setTotalCount(data.totalElements || formattedResults.length);
             } else {
-                console.log('❌ creationResponsesList가 없습니다');
                 setSearchResults([]);
                 setTotalCount(0);
             }
 
         } catch (error) {
-            console.error('💥 검색 오류 상세:', error);
-            console.error('💥 오류 스택:', error.stack);
-            console.error('💥 오류 이름:', error.name);
-            console.error('💥 오류 메시지:', error.message);
-
-            setError(`검색 중 오류가 발생했습니다: ${error.message}`);
+            console.error('검색 오류:', error);
+            setError('검색 중 오류가 발생했습니다. 다시 시도해주세요.');
             setSearchResults([]);
             setTotalCount(0);
         } finally {
             setLoading(false);
-            console.log('🏁 검색 완료');
         }
     };
-
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
@@ -170,7 +95,9 @@ const Search = () => {
     };
 
     const handleRetry = () => {
-        performSearch(searchQuery);
+        if (searchQuery) {
+            performSearch(searchQuery);
+        }
     };
 
     return (
@@ -218,7 +145,7 @@ const Search = () => {
                 <span className={styles['count']}>{totalCount}개</span>
             </div>
 
-            {/* 검색 결과 - ResultList 컴포넌트 사용 */}
+            {/* 검색 결과 */}
             <ResultList
                 results={searchResults}
                 loading={loading}

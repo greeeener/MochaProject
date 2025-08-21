@@ -31,6 +31,7 @@ public class CreationService {
     private final PlatformRepository platformRepository;
     private final GenreRepository genreRepository;
     private final KeywordRepository keywordRepository;
+
     public int createCreation(CreateCreationRequest request){
         List<Creator> creatorList = creatorRepository.findAllById(request.creatorList());
         List<Platform> platformList = platformRepository.findAllById(request.platformList());

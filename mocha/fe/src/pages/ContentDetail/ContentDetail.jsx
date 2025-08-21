@@ -1,5 +1,5 @@
 // src/pages/Artwork/ContentDetail.jsx
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './ContentDetail.module.css';
 
@@ -10,6 +10,38 @@ const ContentDetail = () => {
     const [showDetails, setShowDetails] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [otherWorks, setOtherWorks] = useState([]);
+
+    const fetchOtherWorks = async(authorName) => {
+        try {
+            const requestBody = {
+                searchKeyword: authorName,
+                publisher: null,
+                genreList: [],
+                keywordList: []
+            };
+
+            const response = await fetch(`/mc/creation/getCreationList?page=0&size=8`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.creationResponsesList) {
+                    const filteredWorks = data.creationResponsesList
+                        .filter(work => work.id !== parseInt(id))
+                        .slice(0, 4);
+                    setOtherWorks(filteredWorks);
+                }
+            }
+        } catch (error) {
+            console.error('작가의 다른 작품 로딩 실패:', error);
+        }
+    };
 
     useEffect(() => {
         const fetchNovelData = async () => {
@@ -28,6 +60,7 @@ const ContentDetail = () => {
 
                 // API 응답을 화면에 맞는 형태로 변환
                 const formattedData = {
+                    coverImage: "/StrangeStory.jfif", //TODO: 작품 썸네일 이미지 추가
                     title: data.title,
                     author: Array.isArray(data.creatorList) ?
                         data.creatorList.map(creator => creator.creator_name).join(', ') :
@@ -35,18 +68,17 @@ const ContentDetail = () => {
                     genre: Array.isArray(data.genreList) ?
                         data.genreList.map(genre => genre.genre_name).join(', ') :
                         '기타',
-                    coverImage: "", //TODO: DB에 추가되면 바꾸기
-                    description: data.description,
-                    episodes: data.episodes,
+                    keywords: Array.isArray(data.genreList) && data.genreList.length > 0 ?
+                        data.genreList.flatMap(genre =>
+                            Array.isArray(genre.keywords) ? genre.keywords : []
+                        ) : [],
+                    // ✅ 작가 정보 저장 (다른 작품 검색용)
+                    authorList: Array.isArray(data.creatorList) ? data.creatorList : [],
                     status: data.is_end ? '완결' : '연재중',
-                    gidamu: data.gidamu,
+                    description: data.description,
+                    //gidamu: data.gidamu>0 ? `${data.gidamu}시간` : "기다무 없음",
                     publisher: data.publisher,
                     age_limit: data.age_limit,
-                    free_episodes: data.free_episodes,
-                    rent_cost: data.rent_cost,
-                    buy_cost: data.buy_cost,
-                    start_date: data.start_date,
-                    latest_date: data.latest_date,
                     platforms: Array.isArray(data.platformList) ?
                         data.platformList.map((platform) => ({
                             id: platform.platform_id,
@@ -58,7 +90,8 @@ const ContentDetail = () => {
                             rentPrice: data.rent_cost,
                             currency: "원",
                             rentInfo: data.rent_cost > 0 ? `대여 ${data.rent_cost}원` : "대여 구매 불가",
-                            coinCost: platform.coin_cost
+                            coinCost: `${data.buy_cost * platform.coin_cost}`,
+                            buyInfo: data.buy_cost > 0 ? `소장 전체 ${(data.buy_cost * Math.max(0, data.episodes - data.free_episodes)).toLocaleString()}원` : "소장 구매 불가"
                         })) : []
                 };
 
@@ -76,13 +109,14 @@ const ContentDetail = () => {
         }
     }, [id]);
 
-    const getPlatformLogo = (platformName) => {
-        const logoMap = {
-            //TODO: 플랫폼 로고 추가
-        };
-        return logoMap[platformName] || '';
-    };
+    useEffect(() => {
+        if (novelData && novelData.authorList.length > 0) {
+            const firstAuthor = novelData.authorList[0].creator_name;
+            fetchOtherWorks(firstAuthor);
+        }
+    }, [novelData, id]);
 
+    //북마크 처리
     const handleBookmark = async () => {
         try {
             // TODO: 북마크 API 호출
@@ -92,8 +126,17 @@ const ContentDetail = () => {
         }
     };
 
+    //상세 정보 더보기 토글
     const toggleDetails = () => {
         setShowDetails(!showDetails);
+    };
+
+    //플랫폼 로고 가져오기
+    const getPlatformLogo = (platformName) => {
+        const logoMap = {
+            //TODO: 플랫폼 로고 추가
+        };
+        return logoMap[platformName] || "/Kakaopage.png";
     };
 
     //로딩
@@ -152,6 +195,7 @@ const ContentDetail = () => {
             {/* 하얀 배경 콘텐츠 */}
             <div className={styles['white-content']}>
                 {/* 제목 및 작가 정보 */}
+
                 <div className={styles['novel-info']}>
                     <h1 className={styles['novel-title']}>{novelData.title}</h1>
                     <p className={styles['novel-author']}>
@@ -160,36 +204,80 @@ const ContentDetail = () => {
                         </span>
                     </p>
                     <button className={styles['detail-toggle']} onClick={toggleDetails}>
-                        <span className={`${styles['toggle-icon']} ${showDetails ? styles['expanded'] : ''}`}>
-                            ˅
+                        <span className={styles['toggle-text']}>
+                            {showDetails ? '접기' : '더보기'}
                         </span>
                     </button>
                 </div>
 
-                {/* 상세 정보 (접힌 상태) */}
+                {/* 상세 정보 (토글) */}
                 {showDetails && (
                     <div className={styles['novel-details']}>
-                        <p className={styles['genre']}>장르: {novelData.genre}</p>
-                        <p className={styles['genre']}>출판사: {novelData.publisher}</p>
-                        <p className={styles['genre']}>총 {novelData.episodes}화 · 무료 {novelData.free_episodes}화</p>
-                        <p className={styles['genre']}>연령 제한: {novelData.age_limit}세 이상</p>
-                        <p className={styles['genre']}>기다무: {novelData.gidamu?.toLocaleString()}</p>
-                        {novelData.start_date && (
-                            <p className={styles['genre']}>연재 시작: {new Date(novelData.start_date).toLocaleDateString()}</p>
-                        )}
-                        {novelData.latest_date && (
-                            <p className={styles['genre']}>최근 업데이트: {new Date(novelData.latest_date).toLocaleDateString()}</p>
-                        )}
+                        <h3 className={styles['platform-section-title']}>작품 소개</h3>
                         {novelData.description && (
-                            <p className={styles['description']}>{novelData.description}</p>
+                            <div className={styles['description']}>
+                                {novelData.description
+                                    .replace(/\\n/g, '<br>')  // \\n을 <br>로 교체
+                                    .split('<br>')
+                                    .map((line, index, array) => (
+                                        <React.Fragment key={index}>
+                                            {line}
+                                            {index < array.length - 1 && <br/>}
+                                        </React.Fragment>
+                                    ))
+                                }
+                            </div>
                         )}
+
+                        <h3 className={styles['platform-section-title']}>키워드</h3>
+                        <div className={styles['keywords-container']}>
+                            {novelData.keywords.length > 0 ? (
+                                novelData.keywords.map((keyword, index) => (
+                                    <span key={index} className={styles['keyword-tag']}>
+                                        #{keyword.keyword_name}
+                                    </span>
+                                ))
+                            ) : (
+                                <p className={styles['no-keyword']}>키워드가 없습니다.</p>
+                            )}
+                        </div>
+
+                        <h3 className={styles['platform-section-title']}>작가의 다른 작품</h3>
+                        <div className={styles['other-works-container']}>
+                            {otherWorks.length > 0 ? (
+                                otherWorks.map((work, index) => (
+                                    <div
+                                        key={work.id || index}
+                                        className={styles['other-work-item']}
+                                        onClick={() => window.location.href = `/content/${work.id}`}
+                                    >
+                                        <img
+                                            src={work.coverImage || "/StrangeStory.jfif"}
+                                            alt={work.title}
+                                            className={styles['other-work-image']}
+                                        />
+                                        <p className={styles['other-work-title']}>{work.title}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className={styles['no-data']}>다른 작품이 없습니다.</p>
+                            )}
+                        </div>
+
+                        <h3 className={styles['platform-section-title']}>작품 정보</h3>
+                        <p className={styles['description']}>출판사: {novelData.publisher}</p>
+                        <p className={styles['description']}>연령제한: {novelData.age_limit}세 이상</p>
+
                     </div>
                 )}
 
+
                 {/* 플랫폼 정보 */}
+                <h3 className={styles['platform-section-title']}>이용 가능한 플랫폼</h3>
+
+                {/* 플랫폼 정보 있을 때 */}
                 {novelData.platforms.length > 0 && (
                     <div className={styles['platforms']}>
-                        <h3 className={styles['platform-section-title']}>이용 가능한 플랫폼</h3>
                         {novelData.platforms.map((platform, index) => (
                             <div key={platform.id || index} className={styles['platform-card']}>
                                 <div className={styles['platform-content']}>
@@ -210,10 +298,11 @@ const ContentDetail = () => {
                                         </p>
                                         <p className={styles['rent-info']}>{platform.rentInfo}</p>
                                         <p className={styles['pricing']}>
-                                            소장 전체 {platform.totalPrice.toLocaleString()}{platform.currency}
+                                            소장 전체 {(
+                                            (platform.coinCost || 0) * Math.max(0, (platform.episodes || 0) - (platform.freeEpisodes || 0))).toLocaleString()}원
                                             {platform.coinCost > 0 && (
                                                 <span className={styles['coin-cost']}>
-                                                    ({platform.coinCost} 코인)
+                                                    (1화 {platform.coinCost}원)
                                                 </span>
                                             )}
                                         </p>
@@ -224,7 +313,7 @@ const ContentDetail = () => {
                     </div>
                 )}
 
-                {/* 플랫폼이 없는 경우 */}
+                {/* 플랫폼이 없을 때 */}
                 {novelData.platforms.length === 0 && (
                     <div className={styles['no-platforms']}>
                         <p>현재 이용 가능한 플랫폼이 없습니다.</p>

@@ -31,7 +31,7 @@ public class GenreService {
 
         // 응답 객체 생성 및 반환
         return new CreateGenreResponse(
-                genre.getGenreId(),
+                genre.getGenre_id(),
                 genre.getGenre_name()
         );
     }
@@ -44,7 +44,7 @@ public class GenreService {
 
         // ReadCreatorResponse로 변환하여 반환
         return new ReadGenreResponse(
-                genre.getGenreId(),
+                genre.getGenre_id(),
                 genre.getGenre_name()
         );
     }
@@ -52,7 +52,7 @@ public class GenreService {
     //전체 장르 리스트 불러오기
     public List<ReadGenreResponse> getGenreList(){
         return genreRepository.findAll().stream()
-                .map(genre -> new ReadGenreResponse(genre.getGenreId(), genre.getGenre_name()))
+                .map(genre -> new ReadGenreResponse(genre.getGenre_id(), genre.getGenre_name()))
                 .toList();
     }
 
@@ -81,7 +81,7 @@ public class GenreService {
 
         // 응답 객체 생성 및 반환
         return new CreateGenreResponse(
-                genre.getGenreId(),
+                genre.getGenre_id(),
                 genre.getGenre_name()
         );
     }

@@ -1,5 +1,7 @@
 package com.project.mocha.Creation.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.mocha.Creator.Entity.Creator;
 import com.project.mocha.Genre.Entity.Genre;
 import com.project.mocha.Keyword.Entity.Keyword;
@@ -16,6 +18,7 @@ import java.util.List;
 
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data //getter,setter
 @Builder
 @NoArgsConstructor
@@ -75,7 +78,7 @@ public class Creation { //implements Auditable { //데이터 생성 및 최근 �
             joinColumns = @JoinColumn(name = "Creation_creation_id"),
             inverseJoinColumns = @JoinColumn(name = "Creator_creator_id")
     )
-    private List<Creator> CreatorList;
+    private List<Creator> creatorList;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -83,7 +86,7 @@ public class Creation { //implements Auditable { //데이터 생성 및 최근 �
             joinColumns = @JoinColumn(name = "Creation_creation_id"),
             inverseJoinColumns = @JoinColumn(name = "Platform_platform_id")
     )
-    private List<Platform> PlatformList;
+    private List<Platform> platformList;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -91,7 +94,7 @@ public class Creation { //implements Auditable { //데이터 생성 및 최근 �
             joinColumns = @JoinColumn(name = "Creation_creation_id"),
             inverseJoinColumns = @JoinColumn(name = "Genre_genre_id")
     )
-    private List<Genre> GenreList;
+    private List<Genre> genreList;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -99,7 +102,7 @@ public class Creation { //implements Auditable { //데이터 생성 및 최근 �
             joinColumns = @JoinColumn(name = "Creation_creation_id"),
             inverseJoinColumns = @JoinColumn(name = "Keyword_keyword_id")
     )
-    private List<Keyword> KeywordList;
+    private List<Keyword> keywordList;
 
     /*
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Creator> CreatorList;
@@ -123,10 +126,10 @@ public class Creation { //implements Auditable { //데이터 생성 및 최근 �
         this.start_date = start_date;
         this.latest_date = latest_date;
         this.description = description;
-        this.CreatorList = creatorList;
-        this.PlatformList = platformList;
-        this.GenreList = genreList;
-        this.KeywordList = keywordList;
+        this.creatorList = creatorList;
+        this.platformList = platformList;
+        this.genreList = genreList;
+        this.keywordList = keywordList;
     }
 
     public static Creation createCreation(String title, String publisher, int age_limit, int episodes, boolean is_end, int free_episodes, int gidamu, String period, int rent_cost, int buy_cost, Date start_date, Date latest_date, String description, List<Creator> creatorList, List<Platform> platformList, List<Genre> genreList, List<Keyword> keywordList) {
@@ -147,9 +150,9 @@ public class Creation { //implements Auditable { //데이터 생성 및 최근 �
         this.start_date = start_date;
         this.latest_date = latest_date;
         this.description = description;
-        this.CreatorList = creatorList;
-        this.PlatformList = platformList;
-        this.GenreList = genreList;
-        this.KeywordList = keywordList;
+        this.creatorList = creatorList;
+        this.platformList = platformList;
+        this.genreList = genreList;
+        this.keywordList = keywordList;
     }
 }
