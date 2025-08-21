@@ -38,13 +38,13 @@ public class KeywordService {
                 keyword.getKeyword_id(),
                 keyword.getKeyword_name(),
                 keyword.getIs_expose(),
-                keyword.getGenre().getGenreId()
+                keyword.getGenre().getGenre_id()
         );
     }
 
     public ReadKeywordResponse getKeywordList(int genreId) {
         // genreId를 기반으로 Keyword 리스트 조회
-        List<Keyword> keywords = keywordRepository.findByGenre_GenreId(genreId);
+        List<Keyword> keywords = keywordRepository.findByGenreId(genreId);
 
         // 키워드 리스트를 ReadKeywordResponse 리스트로 변환
         List<ReadKeywordResponse.KeywordResponse> keywordResponses = keywords.stream()
@@ -52,7 +52,7 @@ public class KeywordService {
                         keyword.getKeyword_id(),
                         keyword.getKeyword_name(),
                         keyword.getIs_expose(),
-                        keyword.getGenre().getGenreId()
+                        keyword.getGenre().getGenre_id()
                 ))
                 .collect(Collectors.toList());
 

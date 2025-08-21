@@ -14,11 +14,19 @@ function ResultItem({ item, onClick }) {
         }
     };
 
+    // 기본 이미지 설정
+    const getImageSrc = () => {
+        if (item.coverImage && item.coverImage !== "") {
+            return item.coverImage;
+        }
+        return "/StrangeStory.jfif";  // 기본 이미지
+    };
+
     return (
         <div className={styles['item']} onClick={handleClick}>
             <div className={styles['item-image']}>
                 <img
-                    src={item.coverImage || '/placeholder.jpg'}
+                    src={getImageSrc()}
                     alt={item.title}
                 />
             </div>

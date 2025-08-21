@@ -1,5 +1,7 @@
 package com.project.mocha.Keyword.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.project.mocha.Genre.Entity.Genre;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,6 +15,7 @@ import java.util.List;
 
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "keyword_id")
 @Data //getter,setter
 @Builder
 @NoArgsConstructor

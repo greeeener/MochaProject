@@ -1,5 +1,7 @@
 package com.project.mocha.Genre.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.project.mocha.Keyword.Entity.Keyword;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "genre_id")
 @Data //getter,setter
 @Builder
 @NoArgsConstructor
@@ -24,7 +27,7 @@ public class Genre {
     @Column(name="genre_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     //@SequenceGenerator(name = "GENRE_SEQ", allocationSize=1)
-    private int genreId;
+    private int genre_id;
     @Column(nullable = false, length = 50)
     private String genre_name;
 
