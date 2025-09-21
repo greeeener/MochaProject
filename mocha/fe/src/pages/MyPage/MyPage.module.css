@@ -1,0 +1,176 @@
+/* src/pages/MyPage/MyPage.module.css */
+.container {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: calc(100vh - 80px);
+    background-color: #ffffff;
+    color: #213547;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    -webkit-overflow-scrolling: touch;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    padding: 40px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.greeting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.greeting-text {
+    font-size: 18px;
+    font-weight: 500;
+    color: #213547;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.settings-icon {
+    width: 24px;
+    height: 24px;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.25s ease;
+}
+
+.settings-icon:hover {
+    color: #213547;
+}
+
+.logout-button {
+    padding: 16px 24px;
+    background-color: #213547;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    transition: background-color 0.25s ease;
+}
+
+.logout-button:hover {
+    background-color: #1a2942;
+}
+
+.logout-button:focus {
+    outline: none;
+}
+
+/* 다크모드 대응 */
+@media (prefers-color-scheme: dark) {
+    .container {
+        background-color: #242424;
+        color: rgba(255, 255, 255, 0.87);
+    }
+
+    .greeting {
+        background-color: #3a3a3a;
+    }
+
+    .greeting-text {
+        color: rgba(255, 255, 255, 0.87);
+    }
+
+    .settings-icon {
+        color: #ccc;
+    }
+
+    .settings-icon:hover {
+        color: rgba(255, 255, 255, 0.87);
+    }
+
+    .logout-button {
+        background-color: #646cff;
+    }
+
+    .logout-button:hover {
+        background-color: #535bf2;
+    }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .content {
+        padding: 30px 15px;
+    }
+
+    .greeting {
+        padding: 16px;
+        margin-bottom: 25px;
+    }
+
+    .greeting-text {
+        font-size: 16px;
+    }
+
+    .logout-button {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content {
+        padding: 20px 15px;
+    }
+
+    .greeting {
+        padding: 14px;
+        margin-bottom: 20px;
+    }
+
+    .greeting-text {
+        font-size: 15px;
+    }
+
+    .logout-button {
+        padding: 12px 18px;
+        font-size: 13px;
+    }
+}
+
+/* 접근성 개선 */
+@media (prefers-reduced-motion: reduce) {
+    .settings-icon,
+    .search-input,
+    .logout-button {
+        transition: none;
+    }
+}
+
+/* 터치 디바이스 최적화 */
+@media (hover: none) and (pointer: coarse) {
+    .settings-icon,
+    .logout-button {
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

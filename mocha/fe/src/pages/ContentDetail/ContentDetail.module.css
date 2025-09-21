@@ -1,4 +1,4 @@
-/* src/pages/Artwork/ContentDetail.css */
+/* src/pages/Artwork/ContentDetail.module.css */
 
 .novel-viewer {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -87,7 +87,6 @@
 .novel-info {
     text-align: center;
     margin-top: 20px;
-    margin-bottom: 32px;
     position: relative;
 }
 
@@ -102,7 +101,7 @@
 .novel-author {
     font-size: 13px;
     color: #333333;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
 }
 
 .author-name {
@@ -113,37 +112,130 @@
 .detail-toggle {
     background: none;
     border: none;
-    font-size: 32px;
-    color: #999;
+    font-size: 13px;
+    color: #666;
     cursor: pointer;
     padding: 2px;
     transition: color 0.2s, transform 0.2s;
+    font-weight: 200;
 }
 
-.detail-toggle:hover {
+.detail-toggle,
+.detail-toggle:hover,
+.detail-toggle:focus,
+.detail-toggle:active,
+.detail-toggle:focus-visible {
     color: #666;
+    outline: none;
+    box-shadow: none;
+    border: none;
 }
 
 .toggle-icon {
     display: inline-block;
     transition: transform 0.2s;
+    outline: none;
+    font-weight: 100;
 }
 
 .toggle-icon.expanded {
     transform: rotate(180deg);
+    outline: none;
 }
 
 /* 상세 정보 */
 .novel-details {
     text-align: center;
-    padding: 16px 0;
-    margin-bottom: 16px;
-    border-top: 1px solid #eee;
+    margin-top : -20px;
 }
 
-.genre {
-    font-size: 14px;
+.no-keyword {
+    color: #999;
+    font-size: 12px;
+    text-align: center;
+    padding: 10px 0;
+    margin: 0;
+}
+
+/* 키워드 */
+.keywords-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.keyword-tag {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 16px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: #495057;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.keyword-tag:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+/* 작가의 다른 작품 */
+.other-works-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.other-work-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.other-work-item:hover {
+    transform: scale(1.05);
+}
+
+.other-work-image {
+    width: 100%;
+    max-width: 80px;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    align-self: flex-start;
+}
+
+.other-work-placeholder {
+    width: 100%;
+    max-width: 80px;
+    aspect-ratio: 3/4;
+    background: #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    align-self:flex-start;
+}
+
+.other-work-title {
+    font-size: 11px;
     color: #666;
+    line-height: 1.3;
+    margin: 0;
+    word-break: keep-all;
+    max-width: 80px;
+    text-align: left;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;          /* 최대 2줄 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* 플랫폼 정보 */
@@ -151,7 +243,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-bottom: 32px;
+    margin-bottom: 15px;
 }
 
 .platform-card {
@@ -267,6 +359,86 @@
     color: #666;
 }
 
+.error {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    gap: 20px;
+    color: #e74c3c;
+    text-align: center;
+}
+
+.error button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.error button:hover {
+    background-color: #2980b9;
+}
+
+.description {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+    text-align: left;
+    margin-bottom: 3px;
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+
+.platform-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 25px 0 15px 0;
+    text-align: left;
+}
+
+.coin-cost {
+    color: #666;
+    font-weight: 400;
+    font-size: 11px;
+    margin-left: 4px;
+}
+
+.no-platforms {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    font-size: 14px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .description {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .error {
+        color: #ff6b6b;
+    }
+
+    .platform-section-title {
+        color: rgba(255, 255, 255, 0.87);
+    }
+
+    .no-platforms {
+        background: #2a2a2a;
+        color: rgba(255, 255, 255, 0.7);
+    }
+}
+
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     .cover-container {
@@ -294,6 +466,26 @@
 
     .white-content {
         padding: 100px 16px 16px;
+    }
+
+    .other-works-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .keyword-tag {
+        font-size: 11px;
+        padding: 5px 10px;
+    }
+
+    .other-work-image,
+    .other-work-placeholder {
+        max-width: 70px;
+    }
+
+    .other-work-title {
+        max-width: 70px;
+        font-size: 10px;
     }
 }
 
@@ -340,6 +532,14 @@
 
     .notice-text {
         color: rgba(255, 255, 255, 0.6);
+    }
+
+    .description {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .error {
+        color: #ff6b6b;
     }
 }
 

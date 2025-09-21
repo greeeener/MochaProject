@@ -1,7 +1,7 @@
 package com.project.mocha.Creation.Entity;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import jakarta.persistence.Entity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import java.util.List;
@@ -11,6 +11,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(access= AccessLevel.PROTECTED)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @DynamoDBTable(tableName="Creation")
 public class Creation {
     // high frequency data

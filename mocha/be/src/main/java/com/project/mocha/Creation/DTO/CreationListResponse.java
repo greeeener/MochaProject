@@ -1,9 +1,6 @@
 package com.project.mocha.Creation.DTO;
 
 import com.project.mocha.Creation.Entity.Creation;
-import com.project.mocha.Creator.Entity.Creator;
-import com.project.mocha.Genre.Entity.Genre;
-import com.project.mocha.Keyword.Entity.Keyword;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

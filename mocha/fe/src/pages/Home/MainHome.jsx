@@ -1,12 +1,13 @@
-// src/pages/Home/MainHome.jsx (클래스 조건부 적용 예시)
+// src/pages/Home/MainHome.jsx
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import './MainHome.css';
+import { useNavigate, useLocation } from 'react-router-dom';
+import styles from './MainHome.module.css';
 
 function MainHome() {
     const [showLogo, setShowLogo] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const location = useLocation();
+    const navigate = useNavigate();
 
     // 헤더가 숨겨지는 페이지인지 확인
     const hideHeaderPaths = ['/password-change', '/login'];
@@ -22,37 +23,43 @@ function MainHome() {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        console.log('검색어:', searchQuery);
+        if (searchQuery.trim()) {
+            navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+        }
     };
 
     return (
-        <div className={`main-home ${hasHeader ? 'with-header' : ''}`}>
+        <div className={`${styles['home']} ${hasHeader ? styles['with-header'] : ''}`}>
             {/* 메인 컨텐츠 */}
-            <main className="main-content">
-                <div className="animation-container">
-                    <div className={`logo-container ${showLogo ? 'show' : 'hide'}`}>
+            <main className={styles['content']}>
+                <div className={styles['animation-container']}>
+                    <div
+                        className={`${styles['logo-container']} ${showLogo ? styles['logo-container-show'] : styles['logo-container-hide']}`}>
+                        <h1 className={styles['header-logo-text']}>MOCA</h1>
+                        {/*
                         <img
-                            src="https://page1.genspark.site/v1/base64_upload/9fbabba3d7cb13bfb03a937eae104b80"
+                            src="" //TODO: 로고 이미지 추가
                             alt="MOCA 로고"
-                            className="logo-image"
+                            className={styles['logo-image']}
                         />
+                        */}
                     </div>
-                    <div className={`search-text-container ${!showLogo ? 'show' : 'hide'}`}>
-                        <p className="search-text">내가 찾는 이 작품,</p>
-                        <p className="search-text">어디서 볼 수 있을까?</p>
+                    <div className={`${styles['text-container']} ${!showLogo ? styles['text-container-show'] : styles['text-container-hide']}`}>
+                        <p className={styles['search-text']}>내가 찾는 이 작품,</p>
+                        <p className={styles['search-text']}>어디서 볼 수 있을까?</p>
                     </div>
                 </div>
 
-                <form className="search-form" onSubmit={handleSearch}>
-                    <div className="search-container">
+                <form className={styles['search-form']} onSubmit={handleSearch}>
+                    <div className={styles['search-container']}>
                         <input
                             type="text"
-                            className="search-input"
+                            className={styles['search-input']}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder=""
                         />
-                        <button type="submit" className="search-button">
+                        <button type="submit" className={styles['search-button']}>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                  strokeWidth="2">
                                 <circle cx="11" cy="11" r="8"/>
@@ -63,8 +70,8 @@ function MainHome() {
                 </form>
             </main>
 
-            <footer className="main-footer">
-                <p className="disclaimer">
+            <footer className={styles['footer']}>
+                <p className={styles['disclaimer']}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <circle cx="12" cy="12" r="10"/>
                         <line x1="12" y1="18" x2="12" y2="11.5"/>
