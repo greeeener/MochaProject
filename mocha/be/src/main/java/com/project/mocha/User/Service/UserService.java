@@ -1,59 +1,69 @@
 package com.project.mocha.User.Service;
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.project.mocha.User.DTO.*;
 import com.project.mocha.User.Entity.User;
-import com.project.mocha.User.Repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
-@Setter
-@RequiredArgsConstructor
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class UserService {
 
     /*
     나중에 Session 사용하게 되면 DTO 구조랑 로직 바꿔야할 듯
      */
 
-    private final UserRepository userRepository;
+    private final AmazonDynamoDBClient amazonDynamoDBClient;
 
     @Transactional
-    public int createUser(CreateUserRequest request){
+    public String createUser(CreateUserRequest request){
         User user = User.builder()
-                .uid(request.uid())
+                .id(request.id())
                 .pwd(request.pwd())
                 .isAdult(request.isAdult())
+                .createdAt(LocalDateTime.now()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .storage(new HashSet<String>(List.of("")))
                 .build();
-        return userRepository.save(user).getUserId();
+        DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
+        mapper.save(user);
+        return user.getId();   // success
     }
 
     public ReadUserResponse getUser(ReadUserRequest request){
-        Optional<User> result = userRepository.findById(request.userId());
-        if (result.isPresent()){
-            User user = result.get();
-            return new ReadUserResponse(user.getUserId(), user.getUid(), user.isAdult());
-        }
+        DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
+        User user = mapper.load(User.class, request.id());
+        if (user != null)
+            return new ReadUserResponse(user.getId(), user.isAdult());
         return null;
     }
 
     @Transactional
-    public int updateUser(UpdateUserRequest request){
-        User user = User.builder()
-                .userId(request.userId())
-                .uid(request.uid())
-                .pwd(request.pwd())
-                .isAdult(request.isAdult())
-                .build();
-        return userRepository.save(user).getUserId();
+    public String updateUser(UpdateUserRequest request){
+        DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
+        User user = mapper.load(User.class, request.id());
+        user.setId(request.id());
+        user.setPwd(request.pwd());
+        user.setAdult(request.isAdult());
+        mapper.save(user);
+        return user.getId();   // success
     }
 
     @Transactional
     public void deleteUser(ReadUserRequest request){
-        userRepository.deleteById(request.userId());
+        DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
+        mapper.delete(mapper.load(User.class, request.id()));
     }
 }

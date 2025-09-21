@@ -1,34 +1,26 @@
 package com.project.mocha.User.Entity;
 
-import com.project.mocha.Storage.Entity.Storage;
-import jakarta.persistence.*;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 @Builder
+@Data
 @NoArgsConstructor
-@AllArgsConstructor(access=AccessLevel.PROTECTED)
-@Data //getter,setter
-@Entity
-@Table(name="User")
+@AllArgsConstructor(access= AccessLevel.PROTECTED)
+@DynamoDBTable(tableName="User")
 public class User {
-    @Id
-    @Column(name="user_id", nullable=false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int userId;
-
-    @Column(name="uid", nullable=false, length=20)
-    private String uid;     // user가 직접 지은 ID
-
-    @Column(name="pwd", nullable=false, length=20)
+    @DynamoDBHashKey(attributeName="id")
+    private String id;
+    @DynamoDBAttribute
     private String pwd;
-
-    @Column(name="is_adult", nullable=false)
-    private boolean isAdult;       // default를 false로?
-    /*
-    @OneToMany(mappedBy="user", fetch=FetchType.LAZY)
-    private List<Storage> StorageList = new ArrayList<>();
-    */
+    @DynamoDBAttribute(attributeName="created_at")
+    private String createdAt;
+    @DynamoDBAttribute(attributeName="adult")
+    private boolean isAdult;
+    @DynamoDBAttribute(attributeName="storage")
+    private HashSet<String> storage;
 }

@@ -3,7 +3,6 @@ package com.project.mocha.Creation.Repository;
 import com.project.mocha.Creation.Entity.Creation;
 import com.project.mocha.Genre.Entity.Genre;
 import com.project.mocha.Keyword.Entity.Keyword;
-import com.project.mocha.Platform.Entity.Platform;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -18,10 +17,10 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
+/*
 import static com.project.mocha.Creation.Entity.QCreation.creation;
 import static com.project.mocha.Creator.Entity.QCreator.creator;
-import static com.project.mocha.Genre.Entity.QGenre.genre;
-import static com.project.mocha.Keyword.Entity.QKeyword.keyword;
+ */
 
 @RequiredArgsConstructor
 public class CreationRepositoryImpl implements CreationRepositoryCustom{
@@ -29,28 +28,33 @@ public class CreationRepositoryImpl implements CreationRepositoryCustom{
 
     @Override
     public Page<Creation> findAllWithFiltering(String searchKeyword, String publisher, Boolean is_end, List<Genre> genreList, List<Keyword> keywordList, Pageable pageable) {
+        /*
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         if (searchKeyword != null && !searchKeyword.isEmpty()) {
             booleanBuilder.or(creation.title.containsIgnoreCase(searchKeyword));
-            booleanBuilder.or(creation.creatorList.any().creator_name.containsIgnoreCase(searchKeyword));
+            booleanBuilder.or(creation.CreatorList.any().creator_name.containsIgnoreCase(searchKeyword));
             booleanBuilder.or(creation.publisher.containsIgnoreCase(searchKeyword));
         }
 
+        if(is_end != null){
+            booleanBuilder.and(creation.is_end.eq(is_end));
+        }
+
         if (genreList != null && !genreList.isEmpty()) {
-            for (Genre genreEntity : genreList) {
-                booleanBuilder.and(creation.genreList.any().eq(genreEntity));
+            for (Genre genre : genreList) {
+                booleanBuilder.and(creation.GenreList.any().eq(genre));
             }
         }
 
         if (keywordList != null && !keywordList.isEmpty()) {
-            for (Keyword keywordEntity : keywordList) {
-                booleanBuilder.and(creation.keywordList.any().eq(keywordEntity));
+            for (Keyword keyword : keywordList) {
+                booleanBuilder.and(creation.KeywordList.any().eq(keyword));
             }
         }
 
         // 쿼리 실행
-        List<Creation> creations = queryFactory
+        List<Creation> creations =  queryFactory
                 .selectFrom(creation)
                 .where(booleanBuilder)
                 .orderBy(getOrderSpecifier(pageable.getSort()))
@@ -65,10 +69,13 @@ public class CreationRepositoryImpl implements CreationRepositoryCustom{
                 .fetchOne();
 
         return new PageImpl<>(creations, pageable, total);
+        */
+        return null;
     }
 
 
     private OrderSpecifier[] getOrderSpecifier(Sort sort) {
+        /*
         OrderSpecifier[] specifiers = sort.stream()
                 .map(this::getOrderSpecifier)
                 .toArray(OrderSpecifier[]::new);
@@ -85,5 +92,7 @@ public class CreationRepositoryImpl implements CreationRepositoryCustom{
         Order direction = order.isAscending() ? Order.ASC : Order.DESC;
         PathBuilder pathBuilder = new PathBuilder(creation.getType(), creation.getMetadata());
         return new OrderSpecifier(direction, pathBuilder.get(order.getProperty()));
+    */
+        return null;
     }
 }

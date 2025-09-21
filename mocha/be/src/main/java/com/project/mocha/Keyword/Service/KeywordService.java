@@ -1,63 +1,29 @@
 package com.project.mocha.Keyword.Service;
 
-import com.project.mocha.Genre.Entity.Genre;
-import com.project.mocha.Genre.Repository.GenreRepository;
-import com.project.mocha.Keyword.DTO.CreateKeywordRequest;
-import com.project.mocha.Keyword.DTO.CreateKeywordResponse;
-import com.project.mocha.Keyword.DTO.ReadKeywordResponse;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.project.mocha.Genre.DTO.CreateKeywordRequest;
 import com.project.mocha.Keyword.Entity.Keyword;
-import com.project.mocha.Keyword.Repository.KeywordRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class KeywordService {
 
-    private final KeywordRepository keywordRepository;
-    private final GenreRepository genreRepository;
+    private final AmazonDynamoDBClient amazonDynamoDBClient;
 
-    public CreateKeywordResponse createKeyword(CreateKeywordRequest request) {
-        Genre genre = genreRepository.findById(request.getGenreId())
-                .orElseThrow(() -> new RuntimeException("Genre not found"));
-
+    @Transactional
+    public String createKeyword(CreateKeywordRequest request) {
         Keyword keyword = Keyword.builder()
-                .keyword_name(request.getKeywordName())
-                .is_expose(request.getIsExpose())
-                .genre(genre) // 연관된 Genre 설정
+                .genre(request.genre())
+                .keyword(request.keyword())
+                .genreCategory(request.genreCategory())
+                .isExpose(request.isExpose())
                 .build();
-
-        // DB에 저장
-        keywordRepository.save(keyword);
-
-        // 응답 객체 생성 및 반환
-        return new CreateKeywordResponse(
-                keyword.getKeyword_id(),
-                keyword.getKeyword_name(),
-                keyword.getIs_expose(),
-                keyword.getGenre().getGenre_id()
-        );
+        DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
+        mapper.save(keyword);
+        return keyword.getKeyword();   // success
     }
-
-    public ReadKeywordResponse getKeywordList(int genreId) {
-        // genreId를 기반으로 Keyword 리스트 조회
-        List<Keyword> keywords = keywordRepository.findByGenreId(genreId);
-
-        // 키워드 리스트를 ReadKeywordResponse 리스트로 변환
-        List<ReadKeywordResponse.KeywordResponse> keywordResponses = keywords.stream()
-                .map(keyword -> new ReadKeywordResponse.KeywordResponse(
-                        keyword.getKeyword_id(),
-                        keyword.getKeyword_name(),
-                        keyword.getIs_expose(),
-                        keyword.getGenre().getGenre_id()
-                ))
-                .collect(Collectors.toList());
-
-        // 반환할 ReadKeywordResponse 객체 생성
-        return new ReadKeywordResponse(keywordResponses);
-    }
-
 }

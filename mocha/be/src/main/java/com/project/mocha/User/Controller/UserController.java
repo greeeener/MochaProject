@@ -21,13 +21,13 @@ public class UserController {
 
     @PostMapping
     @Operation(summary="create user")
-    public int createUser(
+    public ResponseEntity<String> createUser(
             @Parameter(required=true, description="create user request")
-            @RequestBody CreateUserRequest request){
-        return userService.createUser(request);
+            @RequestBody CreateUserRequest request) {
+        return ResponseEntity.ok(userService.createUser(request));
     }
 
-    @PostMapping("/get")
+    @GetMapping
     @Operation(summary="get user by id")
     public ResponseEntity<ReadUserResponse> getUser(
             @Parameter(required=true, description="read user request")
@@ -37,10 +37,10 @@ public class UserController {
 
     @PutMapping
     @Operation(summary="update user by id")
-    public int updateUser(
+    public ResponseEntity<String> updateUser(
             @Parameter(required=true, description="update user request")
             @RequestBody UpdateUserRequest request){
-        return userService.updateUser(request);
+        return ResponseEntity.ok(userService.updateUser(request));
     }
 
     @DeleteMapping

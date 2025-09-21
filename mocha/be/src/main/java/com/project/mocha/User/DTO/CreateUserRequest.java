@@ -1,7 +1,7 @@
 package com.project.mocha.User.DTO;
 
 public record CreateUserRequest(
-        String uid,
+        String id,
         String pwd,
         boolean isAdult
 ){}
