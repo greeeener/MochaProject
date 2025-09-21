@@ -1,88 +1,102 @@
 package com.project.mocha.Genre.Service;
 
-import com.project.mocha.Genre.DTO.CreateGenreRequest;
-import com.project.mocha.Genre.DTO.CreateGenreResponse;
-import com.project.mocha.Genre.DTO.ReadGenreResponse;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.project.mocha.Creation.DTO.CreationResponse;
+import com.project.mocha.Creation.DTO.ReadCreationRequest;
+import com.project.mocha.Creation.DTO.UpdateCreationRequest;
+import com.project.mocha.Creation.Entity.Creation;
+import com.project.mocha.Genre.DTO.CreateKeywordRequest;
+import com.project.mocha.Genre.DTO.ReadGenreRequest;
+import com.project.mocha.Genre.DTO.ReadKeywordMapResponse;
+import com.project.mocha.Genre.DTO.UpdateKeywordRequest;
 import com.project.mocha.Genre.Entity.Genre;
-import com.project.mocha.Genre.Repository.GenreRepository;
 import com.project.mocha.Keyword.Entity.Keyword;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-@RequiredArgsConstructor
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class GenreService {
 
-    private final GenreRepository genreRepository;
+    private final AmazonDynamoDBClient amazonDynamoDBClient;
 
-    //장르 DB에 저장
-    public CreateGenreResponse createGenre(CreateGenreRequest request){
-        // Genre 엔티티 생성
-        Genre genre = Genre.builder()
-                .genre_name(request.getGenreName())
+    public void createKeyword(CreateKeywordRequest request) {
+        Keyword keyword = Keyword.builder()
+                .genre(request.genre())
+                .keyword(request.keyword())
+                .genreCategory(request.genreCategory())
+                .isExpose(request.isExpose())
                 .build();
-
-        // DB에 저장
-        genreRepository.save(genre);
-
-        // 응답 객체 생성 및 반환
-        return new CreateGenreResponse(
-                genre.getGenreId(),
-                genre.getGenre_name()
-        );
+        DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
+        mapper.save(keyword);
     }
 
-    //장르 id(genre_id)로 찾기
-    public ReadGenreResponse getGenre(int id){
-        //id로 Creator Entity 검색
-        Genre genre = genreRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Genre not found with id: " + id));
+    /*
+    public ReadKeywordMapResponse getKeywordList(String genre, ReadGenreRequest request){
+        DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
+        Map<String, List<String>> keywords = Map.of();
 
-        // ReadCreatorResponse로 변환하여 반환
-        return new ReadGenreResponse(
-                genre.getGenreId(),
-                genre.getGenre_name()
-        );
+        // 이런걸 캐시로 저장해두면 좋을 듯
+        List<String> categories = request.genreCategory();
+        for(String category: categories){
+            String partitionKey = genre + "#" + category;
+
+            Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+            eav.put(":v1", new AttributeValue().withS(partitionKey));
+            DynamoDBQueryExpression<Genre> queryExpression = new DynamoDBQueryExpression<Genre>()
+                    .withKeyConditionExpression("Id=:v1")
+                    .withExpressionAttributeValues(eav);
+            List<Genre> response = mapper.query(Genre.class, queryExpression);
+            keywords.put(category, response);
+
+        }
+
+        long twoWeeksAgoMilli = (new Date()).getTime() - (14L*24L*60L*60L*1000L);
+        Date twoWeeksAgo = new Date();
+        twoWeeksAgo.setTime(twoWeeksAgoMilli);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        String twoWeeksAgoStr = df.format(twoWeeksAgo);
+
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":v1", new AttributeValue().withS(partitionKey));
+        eav.put(":v2",new AttributeValue().withS(twoWeeksAgoStr.toString()));
+
+        DynamoDBQueryExpression<Reply> queryExpression = new DynamoDBQueryExpression<Reply>()
+                .withKeyConditionExpression("Id = :v1 and ReplyDateTime > :v2")
+                .withExpressionAttributeValues(eav);
+
+        List<Reply> latestReplies = mapper.query(Reply.class, queryExpression);
+
+        Creation creation = mapper.load(Creation.class, request.title(), request.category());
+        if (creation != null)
+            return  CreationResponse.from(request.title(), creation);
+        return null;
     }
 
-    //전체 장르 리스트 불러오기
-    public List<ReadGenreResponse> getGenreList(){
-        return genreRepository.findAll().stream()
-                .map(genre -> new ReadGenreResponse(genre.getGenreId(), genre.getGenre_name()))
-                .toList();
-    }
+     */
 
-    // Genre와 이에 종속된 Keywords 한꺼번에 저장
-    public CreateGenreResponse saveGenreWithKeywords(String genreName, List<CreateGenreRequest.KeywordRequestWithGenre> keywordRequests) {
-        // Genre 엔티티 생성
-        Genre genre = Genre.builder()
-                .genre_name(genreName)
-                .build();
 
-        // Keywords와 연관 관계 설정
-        List<Keyword> keywords = keywordRequests.stream()
-                .map(request -> {
-                    Keyword keyword = new Keyword();
-                    keyword.setKeyword_name(request.keyword_name());
-                    keyword.setIs_expose(request.is_expose());
-                    keyword.setGenre(genre); // genre 필드 설정 추가
-                    return keyword;
-                })
-                .collect(Collectors.toList());
+    public String updateKeyword(String keyword, UpdateKeywordRequest request){
+        DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
 
-        genre.setKeywords(keywords);
+        Genre genre = mapper.load(Genre.class, request.genre(), keyword);
+        genre.setGenre(request.genre());
+        genre.setKeyword(request.keyword());
+        genre.setGenreCategory(request.genreCategory());
+        genre.setExpose(request.isExpose());
 
-        // Genre 저장 (CascadeType.ALL로 인해 Keywords도 저장됨)
-        genreRepository.save(genre);
-
-        // 응답 객체 생성 및 반환
-        return new CreateGenreResponse(
-                genre.getGenreId(),
-                genre.getGenre_name()
-        );
+        mapper.save(genre);
+        return genre.getKeyword();   // success
     }
 }

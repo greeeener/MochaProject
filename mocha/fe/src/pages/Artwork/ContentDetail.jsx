@@ -22,7 +22,7 @@ const ContentDetail = () => {
 
         // 임시 데이터
         setNovelData({
-            title: "괴담에 떨어져도 출근을 하는구나",
+            title: "괴담에 떨어져도 출근을 해야 하는구나",
             author: "백덕수",
             genre: "현대 판타지",
             coverImage: "https://page1.genspark.site/v1/base64_upload/1449ae6e2db19d4f6ed0dd5d3aadd93d",

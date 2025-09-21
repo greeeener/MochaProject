@@ -1,8 +1,7 @@
 package com.project.mocha.User.DTO;
 
 public record UpdateUserRequest(
-        int userId,
-        String uid,
+        String id,
         String pwd,
         boolean isAdult
 ){}

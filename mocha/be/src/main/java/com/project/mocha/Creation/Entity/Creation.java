@@ -1,122 +1,46 @@
 package com.project.mocha.Creation.Entity;
 
-import com.project.mocha.Creator.Entity.Creator;
-import com.project.mocha.Genre.Entity.Genre;
-import com.project.mocha.Keyword.Entity.Keyword;
-import com.project.mocha.Platform.Entity.Platform;
-import jakarta.persistence.*;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import jakarta.persistence.Entity;
 import lombok.*;
-import org.springframework.data.domain.Auditable;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.jpa.repository.config.AuditingBeanDefinitionParser;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
-
-@Entity
-@Data //getter,setter
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor(access= AccessLevel.PROTECTED)
-@Table(name = "Creation")
-//데이터 생성자(빈 컬럼 없게 채워줌)
-//@EnableJpaAuditing //JPA Audit(시간값 자동으로 채워주는 기능) - DB 로그 관리
-//@EntityListeners(AuditingEntityListener.class) //엔티티 변화 감지 - () 추가로 EnableJpaAuditing이 자동으로 갱신되도록
-public class Creation { //implements Auditable { //데이터 생성 및 최근 수정일 자동 관리
-    @Id
-    @Column(name="creation_id", nullable=false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int creationId;
-
-    @Column(nullable = false, length = 100)
+@DynamoDBTable(tableName="Creation")
+public class Creation {
+    // high frequency data
+    @DynamoDBHashKey(attributeName="creation_title")
     private String title;
+    @DynamoDBRangeKey(attributeName="category")
+    private String category;
+    @DynamoDBAttribute(attributeName="thumbnail")
+    private String thumbnail;
+    @DynamoDBAttribute(attributeName="genre")
+    private String genre;
+    @DynamoDBAttribute(attributeName="creators")
+    private List<String> creators;
+    @DynamoDBAttribute(attributeName="keywords")
+    private List<String> keywords;
 
-    @Column(nullable = false, length = 20)
+    // root data
+    @DynamoDBAttribute(attributeName="publisher")
     private String publisher;
-
-    @Column(nullable = false)
-    private int age_limit;
-
-    @Column(nullable = false)
-    private int episodes;
-
-    @Column(nullable = false)
-    private boolean is_end;
-
-    @Column(nullable = false)
-    private int free_episodes;
-
-    @Column(nullable = false)
-    private int gidamu;
-
-    @Column(nullable = false, length = 10)
-    private String period;
-
-    @Column(nullable = false)
-    private int rent_cost;
-
-    @Column(nullable = false)
-    private int buy_cost;
-
-    @Column(nullable = false)
-    private Date start_date;
-
-    @Column(nullable = false)
-    private Date latest_date;
-
-    @Column(nullable = false)
+    @DynamoDBAttribute(attributeName="age_limit")
+    private String ageLimit;
+    @DynamoDBAttribute(attributeName="description")
     private String description;
+    @DynamoDBAttribute(attributeName="release_date")
+    private String releaseDate;
+    @DynamoDBAttribute(attributeName="latest_date")
+    private String latestDate;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Creator> CreatorList;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Platform> PlatformList;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Genre> GenreList;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) private List<Keyword> KeywordList;
-
-
-
-    public Creation(String title, String publisher, int age_limit, int episodes, boolean is_end, int free_episodes, int gidamu, String period, int rent_cost, int buy_cost, Date start_date, Date latest_date, String description, List<Creator> creatorList, List<Platform> platformList, List<Genre> genreList, List<Keyword> keywordList) {
-        this.title = title;
-        this.publisher = publisher;
-        this.age_limit = age_limit;
-        this.episodes = episodes;
-        this.is_end = is_end;
-        this.free_episodes = free_episodes;
-        this.gidamu = gidamu;
-        this.period = period;
-        this.rent_cost = rent_cost;
-        this.buy_cost = buy_cost;
-        this.start_date = start_date;
-        this.latest_date = latest_date;
-        this.description = description;
-        this.CreatorList = creatorList;
-        this.PlatformList = platformList;
-        this.GenreList = genreList;
-        this.KeywordList = keywordList;
-    }
-
-    public static Creation createCreation(String title, String publisher, int age_limit, int episodes, boolean is_end, int free_episodes, int gidamu, String period, int rent_cost, int buy_cost, Date start_date, Date latest_date, String description, List<Creator> creatorList, List<Platform> platformList, List<Genre> genreList, List<Keyword> keywordList) {
-        return new Creation(title, publisher, age_limit, episodes, is_end, free_episodes, gidamu, period, rent_cost, buy_cost, start_date, latest_date, description, creatorList, platformList, genreList, keywordList);
-    }
-
-    public void updateCreation(String title, String publisher, int age_limit, int episodes, boolean is_end, int free_episodes, int gidamu, String period, int rent_cost, int buy_cost, Date start_date, Date latest_date, String description, List<Creator> creatorList, List<Platform> platformList, List<Genre> genreList, List<Keyword> keywordList){
-        this.title = title;
-        this.publisher = publisher;
-        this.age_limit = age_limit;
-        this.episodes = episodes;
-        this.is_end = is_end;
-        this.free_episodes = free_episodes;
-        this.gidamu = gidamu;
-        this.period = period;
-        this.rent_cost = rent_cost;
-        this.buy_cost = buy_cost;
-        this.start_date = start_date;
-        this.latest_date = latest_date;
-        this.description = description;
-        this.CreatorList = creatorList;
-        this.PlatformList = platformList;
-        this.GenreList = genreList;
-        this.KeywordList = keywordList;
-    }
+    @DynamoDBAttribute(attributeName="platforms")
+    private List<Map<String, String>> platforms;
+    @DynamoDBAttribute(attributeName="moca_update_date")
+    private String mocaUpdateDate;
 }

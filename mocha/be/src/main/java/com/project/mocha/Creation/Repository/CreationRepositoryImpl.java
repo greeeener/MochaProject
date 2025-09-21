@@ -17,18 +17,18 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
+/*
 import static com.project.mocha.Creation.Entity.QCreation.creation;
 import static com.project.mocha.Creator.Entity.QCreator.creator;
+ */
 
 @RequiredArgsConstructor
 public class CreationRepositoryImpl implements CreationRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
-
-
-
     @Override
     public Page<Creation> findAllWithFiltering(String searchKeyword, String publisher, Boolean is_end, List<Genre> genreList, List<Keyword> keywordList, Pageable pageable) {
+        /*
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         if (searchKeyword != null && !searchKeyword.isEmpty()) {
@@ -69,12 +69,13 @@ public class CreationRepositoryImpl implements CreationRepositoryCustom{
                 .fetchOne();
 
         return new PageImpl<>(creations, pageable, total);
-
-
+        */
+        return null;
     }
 
 
     private OrderSpecifier[] getOrderSpecifier(Sort sort) {
+        /*
         OrderSpecifier[] specifiers = sort.stream()
                 .map(this::getOrderSpecifier)
                 .toArray(OrderSpecifier[]::new);
@@ -91,5 +92,7 @@ public class CreationRepositoryImpl implements CreationRepositoryCustom{
         Order direction = order.isAscending() ? Order.ASC : Order.DESC;
         PathBuilder pathBuilder = new PathBuilder(creation.getType(), creation.getMetadata());
         return new OrderSpecifier(direction, pathBuilder.get(order.getProperty()));
+    */
+        return null;
     }
 }
